@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Location-based Image Viewer</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Location-based Image Viewer</h1>
+
+    <button id="getLocation">Get My Location</button>
+
+    <div id="map"></div>
+
+    <script>
+        var map;
+        var userMarker;
+
+        function initMap() {
+            map = L.map('map').setView([0, 0], 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+            }).addTo(map);
+        }
+
+        document.getElementById('getLocation').addEventListener('click', function() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Center the map on the user's location
+                    map.setView([latitude, longitude], 12);
+
+                    // Add a marker at the user's location
+                    if (userMarker) {
+                        map.removeLayer(userMarker);
+                    }
+                    userMarker = L.marker([latitude, longitude]).addTo(map);
+
+                    // Fetch and display images (as shown in the previous example)
+                    // ...
+                });
+            } else {
+                alert("Geolocation is not supported by your browser.");
+            }
+        });
+
+        initMap();
+    </script>
+</body>
+</html>
 
